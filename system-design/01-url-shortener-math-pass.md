@@ -1,6 +1,6 @@
 # URL Shortener — NALSD Math Pass
 
-*Applies the numbers to [01-url-shortener-nalsd.md](./01-url-shortener-nalsd.md), same procedure as [03-rate-limiter-math-pass.md](./03-rate-limiter-math-pass.md). Every number here is derived, not assumed. Where the shortener's math turns out to break for a *different* reason than the rate limiter's did, that contrast is called out explicitly — it's the more useful takeaway than either number alone.*
+*Applies the numbers to [01-url-shortener-nalsd.md](./01-url-shortener-nalsd.md), same procedure as [02-rate-limiter-math-pass.md](./02-rate-limiter-math-pass.md). Every number here is derived, not assumed. Where the shortener's math turns out to break for a *different* reason than the rate limiter's did, that contrast is called out explicitly — it's the more useful takeaway than either number alone.*
 
 ---
 
