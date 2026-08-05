@@ -1,28 +1,30 @@
-# DDIA Ch 7 — Partitioning (Sharding)
+# DDIA Ch 7 — Sharding
+
+> Note: the 2nd edition renamed this chapter from "Partitioning" (1st ed) to **"Sharding"** — Kleppmann switched terminology. Same concept: split data across nodes. "Partition" and "shard" are used interchangeably below.
 
 > 2nd edition numbering. Read for **tradeoffs and hot spots**; skim the secondary-index partitioning deep dive (one pass).
 > Interview level: *"How do you shard this, and where's the hot spot?"*
 
 ---
 
-## Why partition
+## Why shard
 
-Replication copies the same data everywhere; partitioning **splits different data across nodes** so a dataset larger than one machine — and a write load higher than one machine — can be handled. Almost always combined with replication: each partition is itself replicated.
+Replication copies the same data everywhere; sharding **splits different data across nodes** so a dataset larger than one machine — and a write load higher than one machine — can be handled. Almost always combined with replication: each partition is itself replicated.
 
 The entire game is **spreading load evenly**. An uneven split (a *hot spot*) means one node does most of the work and you've gained nothing.
 
 ---
 
-## The two partitioning strategies
+## The two sharding strategies
 
-### Key-range partitioning
+### Key-range sharding
 Assign contiguous ranges of the key to each partition (A–F, G–M, ...).
 
 - **Pro:** range scans are efficient — keys are sorted, adjacent data lives together.
 - **Con:** easy to create hot spots. Timestamp keys → all recent writes hit one partition. Sequential IDs → same.
 - Used by: HBase, Bigtable.
 
-### Hash partitioning
+### Hash sharding
 Hash the key, assign hash ranges to partitions. Spreads writes evenly.
 
 - **Pro:** uniform load distribution, kills the timestamp hot spot.
@@ -80,7 +82,7 @@ One-line tradeoff: local = cheap writes / expensive reads; global = expensive wr
 
 ## Interview-ready summary
 
-- Partitioning = split different data to scale beyond one machine; goal is even load.
+- Sharding (a.k.a. partitioning) = split different data to scale beyond one machine; goal is even load.
 - Range (good scans, hot-spot-prone) vs hash (even, no scans).
 - Single hot key defeats hashing — needs suffix-splitting or caching.
 - Never `hash mod N` — use fixed partition count for cheap rebalancing.
