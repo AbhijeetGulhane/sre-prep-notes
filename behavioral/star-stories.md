@@ -85,6 +85,37 @@
 
 ---
 
+## Story 4 — Failure (owned, with a process change)
+
+**Competency:** Made a real mistake, caught it myself, and closed the process gap that caused it.
+**Framing rule:** The failure is the **missing verification step**, not the typo. Own the mistake as real; don't let it read as a safe non-failure. The lesson (I built a tool to verify intended-vs-actual) is the point — lead the close with it.
+
+**Situation:** Early in my career, during the Gap server-build work, I was configuring the network setup across a batch of servers. I made a configuration error — 16 hosts got the wrong subnet mask and a couple got the wrong IP — so those hosts weren't correctly on their intended subnet.
+
+**Task:** These servers had to be built and validated before handover, and getting the network config right was on me.
+
+**Actions:**
+- I caught it myself during connectivity testing after the build. Testing from the jump host, the affected servers failed to connect: the wrong-IP hosts were flatly unreachable because the jump host's iptables only permitted the correct intended subnet, so those addresses were dropped — and that failure is what tipped me off that something was wrong.
+- I pulled the thread. Digging into why the rest were also failing, I found the wrong subnet masks: those hosts had the right IP but miscalculated their local subnet, so return traffic wasn't routing back correctly and same-subnet communication broke. Tracing it surfaced both my errors — the wrong IPs and the wrong masks.
+- I owned the mistake and brought in the network team to correct the config together, rather than risk a second wrong change on production-bound servers by guessing at a fix outside my depth.
+- I then changed how I worked so it couldn't recur silently: I added a manual config-verification step *before* submitting, and I wrote a small script that pulled the actual config off each host — network, storage, Chef, host details — and exported it to Excel so I could diff intended vs. actual and catch any gap before handover.
+
+**Result:** I corrected the affected hosts and completed the build, but the lasting outcome was the process change. I stopped assuming a config was right because I'd entered it, and built a verification step that surfaced the gap between intended and actual state before servers reached handover. That verify-don't-assume instinct — actual state checked against intended state — carried into everything I built afterward.
+
+**Mechanism (know it cold):** Wrong mask → hosts disagree about who's on their local subnet → a host treats a same-subnet neighbor as remote, tries to route through the gateway instead of talking directly → direct comms break. Wrong-IP hosts simply weren't in the intended range at all.
+
+**Detection scope (stay honest — iptables filters on IP, not mask):** The jump-host iptables signal explains the **wrong-IP** hosts (their addresses weren't in the allowed subnet, so dropped). The **wrong-mask** hosts had correct IPs and failed via the routing miscalculation, not iptables. Don't claim iptables caught all 16.
+
+**Probes to have ready:**
+- *"That's a minor mistake you caught yourself — is it really a failure?"* — *"The impact was contained because I caught it, but the failure was that I had no verification step — I was trusting manual config across a batch with nothing checking intended-vs-actual. The same error could have reached production on a bigger build. That gap is what I fixed."*
+- *"Why was this manual across 16 hosts? Why not templated?"* — *"It was manual per-host, which is exactly why one wrong value propagated across the batch. That drove the fix — the verification script, and moving toward templated config. Manual config at scale is a process problem, not a carefulness problem."*
+- *"An Excel visual diff — isn't that unscalable?"* — *"For where I was, it was pragmatic. The tool was simple; the principle wasn't — verify actual against intended, don't assume — and that principle grew into proper config management later."*
+- *"Isn't bringing in the network team just offloading your mistake?"* — *"I diagnosed that it was my error and owned it. I pulled in the specialists to correct it because a second wrong change on production-bound servers would've been worse. Owning the diagnosis while getting the fix right is the mature call."*
+- *"What was the blast radius if you hadn't caught it?"* — *"They'd have gone to handover unable to communicate on their subnet, surfacing downstream as a harder-to-trace problem for whoever used them. The verification step exists to catch that at the cheapest moment, not the most expensive."*
+- **Seniority, straight:** early-career Gap build work. A junior who responded to a config error by building a verification tool is a strong signal — don't inflate the scope.
+
+---
+
 ## Cross-cutting rules
 - Every action beat above is confirmed real. Never add a beat you can't defend under a "how did you measure/verify that?" follow-up.
 - No MTTR figure anywhere — none was ever tracked.
