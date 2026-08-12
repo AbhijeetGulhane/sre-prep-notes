@@ -116,6 +116,33 @@
 
 ---
 
+## Story 5 — Cross-team Collaboration
+
+**Competency:** Was the diagnostic bridge multiple app teams depended on during live, clock-bound DR events.
+**Framing rule:** Accurate scope IS the strength. You owned your share of the **Unix server layer** on a **coordinator-run** event and were the app teams' diagnostic support — NOT the DR event lead, NOT a lone hero carrying 50 teams. Lead with the dependency + pressure; keep "ran the runbook" as setup, not headline. Note: RAID/firewall signals mean these are **real-datacenter** events, not the Gap ESXi VMs.
+
+**Situation:** Twice a year per site across three datacenter sites, we ran DCR events — failing production over to DR or testing full-site resiliency — so an event landed roughly every two months. Each involved 500–1,000 servers and 20–50 application teams, all executing inside a fixed window on a live bridge with hundreds of people and a command-center coordinator driving overall sequencing.
+
+**Task:** I owned my share of the Unix/server layer: bringing Unix servers up cleanly per runbook, then enabling the application teams to validate on top of them — and being the person they relied on when something didn't come up clean.
+
+**Actions:**
+- I brought the Unix servers up per runbook within my slot in the sequence — network and storage ahead of me, my servers ready before app teams could validate — so the dependency chain stayed on schedule on a clock-bound bridge.
+- When an application didn't come up clean, the app team couldn't see the cause from their side, so they depended on me to go in as root — pull the app logs, check the app config and server state, and translate "the app is down" into a concrete server-side reason fast enough for a decision inside the window.
+- I managed load the disciplined way: I worked the coordinator's sequencing rather than setting priority myself, confirmed with app teams whether any server needed to jump the queue, and we ran a secondary on-call from our team so that when multiple issues hit at once we split them instead of one person becoming the bottleneck.
+- I fed diagnosis straight to the app teams and coordinator so the recover-versus-rollback call was made on real information. On one event an app's RAID disk configuration couldn't be completed due to a hardware issue, and my confirmation it wasn't recoverable in the window drove a clean rollback instead of burning time. On another, an app's traffic wasn't getting through despite every server-side test passing on my end; I worked it live with the network team, and when a hardened-firewall path couldn't be cleared before the deadline, our combined diagnosis made the rollback decisive rather than a gamble.
+
+**Result:** Across a recurring every-two-months cycle, I was consistently part of the Unix layer that 20–50 app teams per event relied on to get applications validated — and, when things didn't come up clean, the fast server-side diagnosis that let the coordinator make the right recover-or-rollback call inside the window. The value wasn't running my runbook; it was being the reliable diagnostic bridge between the app teams, the network/storage layers, and the command center under live pressure.
+
+**Probes to have ready:**
+- *"Were you running the DR event?"* — *"No — the command-center coordinator drove it and the sequencing. I owned the Unix server layer: servers up per runbook in my slot, then the diagnostic support app teams relied on when apps didn't come up clean."*
+- *"So you followed a runbook — where's the collaboration?"* — *"The collaboration was the cross-boundary diagnosis: app teams couldn't see why an app failed, network/storage each saw only their layer; I was the one who could go in as root and isolate server vs. config vs. storage vs. network, live, so the coordinator could act."*
+- *"20–50 teams, how did you handle several failing at once?"* — *"I worked the coordinator's sequence rather than picking priority myself, confirmed if any server needed to jump the queue, and we had a secondary on-call so multiple issues got split, not bottlenecked."*
+- *"The firewall one — how did you prove it was network, not your server?"* — *"Every server-side test passed — OS up, service listening, local checks clean — which isolated the fault off the Unix layer onto the network path. Worked it live with network; when the hardened-firewall path couldn't clear before deadline, the combined evidence made rollback the call, not a guess."*
+- *"The RAID one is a hardware issue — what was your role?"* — *"The RAID config was storage/hardware, not mine. My role was confirming from the server side that it couldn't be completed in the window, so the coordinator could roll back on solid information instead of burning time."*
+- *"Was this you, or your team?"* — *"A team effort — a couple of us from the Unix side worked the event. I'm describing my share: my part of the server layer per the coordinator's sequence, and being the app teams' diagnostic point of contact. The secondary was there so no one became a bottleneck."*
+
+---
+
 ## Cross-cutting rules
 - Every action beat above is confirmed real. Never add a beat you can't defend under a "how did you measure/verify that?" follow-up.
 - No MTTR figure anywhere — none was ever tracked.
