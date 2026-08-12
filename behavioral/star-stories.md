@@ -143,6 +143,37 @@
 
 ---
 
+## Story 6 — Dealing with Ambiguity
+
+**Competency:** Created structure where the problem, cause, and ownership were all undefined — found the signal that cracked it.
+**Framing rule:** The ambiguity is that the bug fell **between teams** (DB said schema fine, app said UI fine) and diagnostics led nowhere — nobody owned it and nobody knew what it even was. The winning beat is the **top-down decomposition**: monthly totals matched → weekly matched → daily broke, with errors on exactly the holiday and the Monday after. That systematic narrowing localized an unlocalized bug. Lead with the *method* (decompose until it localizes), not the one-line fix, and not "I noticed it was around holidays" — you *derived* the holiday finding, didn't guess it.
+
+**Situation:** In my current production-support role, an application release went out — a UI change plus mostly-DDL database changes. Shortly after, traders started reporting that data was incorrect for reported trades. The system lets traders enter trades for their books; the per-trade balance summary looked fine, but the cumulative report over certain time periods showed wrong numbers. There was no obvious cause and no clear owner — the DB team checked the schema and found nothing wrong, the app team checked the UI code and found nothing wrong, and the diagnostics led nowhere.
+
+**Task:** With the problem undefined and falling between the DB and application layers, I needed to figure out *what* was actually wrong and *where* it lived before anyone could fix it — the report was wrong, but nothing anyone had checked explained why.
+
+**Actions:**
+- Rather than re-checking the layers others had already cleared, I went at the data itself and narrowed it top-down: I started at the monthly totals, which summed correctly, then weekly, which also matched, then dropped to the daily summary — which is where the numbers broke.
+- The daily view localized it precisely: the errors landed on specific days — the holiday itself and the Monday after it. That two-day fingerprint reframed the problem from "the cumulative report is wrong somewhere" to "something about how the system handles holidays and the following business day is off," turning an unlocalized bug into a pinpointed one.
+- I took that pattern to the developers (BTB) and worked through the code with them against that specific lens, which led us to the exact defect — a single line that accounted for weekends but not holidays, so the affected periods didn't count the holiday correctly.
+- With root cause identified, the fix was patched, tested, and rolled out to correct the reporting.
+
+**Result:** I turned an undefined, cross-team data-correctness problem that had stalled — schema clean, UI clean, diagnostics dead-ended — into a located, fixed defect by decomposing the aggregation top-down (monthly → weekly → daily) until the error localized to the holiday and the day after it. The structure I imposed — narrowing the data systematically rather than re-litigating layers already cleared — is what moved it from "the numbers are wrong and we don't know why" to a one-line code fix.
+
+**Probes to have ready:**
+- *"What made you look at the data pattern instead of the code?"* — *"The obvious layers had already been cleared — DB said schema was fine, app said UI was fine. Re-checking them would've repeated dead ends. The one thing nobody had characterized was the shape of the wrongness itself, so I looked at which numbers were off and when."*
+- *"How did you land on holidays specifically?"* — *"I decomposed the aggregation top-down. Monthly totals summed correctly, weekly matched too, so I dropped to the daily summary — and the errors landed on exactly two days: the holiday and the Monday after it. I didn't guess 'holidays'; I narrowed until the data pointed there, and that fingerprint took the developers to the date-handling logic."*
+- *"Whose bug was it, and why didn't the checks catch it?"* — *"It was application logic, but it passed schema and UI review because it wasn't a schema or interface defect — it was a correctness gap in date handling that only manifested cumulatively, around holidays. That's exactly why it fell between teams and why pattern-on-the-data was the way in."*
+- *"You didn't fix the code yourself — what was your contribution?"* — *"I don't own the app codebase; the developers do. My contribution was defining the problem they'd been unable to define — giving them the holiday correlation so they could go to the exact logic instead of searching blind. I turned an unlocalized bug into a located one."*
+- *"How did you act under uncertainty here?"* — *"I didn't wait for someone to hand me a defined problem or clear ownership — the report was wrong and it was between teams. I took the ambiguity as mine to reduce and drove it from the data until it had a shape someone could fix."*
+- *"The DB team and developers couldn't find it, but you did — what did you do differently?"* (credit probe — frame as METHOD, not brilliance) — *"It's not that I was smarter — they were each looking inside their own layer, which is the right first instinct, and those layers were genuinely clean. What was missing was anyone characterizing the failure itself. I decomposed the wrong data top-down instead, and the two-day fingerprint fell out of that. Different angle, not a smarter person."*
+- *"Why didn't release testing catch a data-correctness bug?"* (turn into reliability signal) — *"It only manifested cumulatively and only when a holiday fell in the period — per-trade summaries were correct, so anything checked at the trade level passed. It's a calendar-edge case in aggregation logic, exactly the kind of defect that survives schema review, UI review, and normal-day testing — which is the argument for holiday/boundary-date cases in test coverage."*
+- *"After the fix, did you prevent recurrence?"* (Round 6 — honest forward-looking close) — *"The immediate fix shipped, tested and rolled out. The preventive follow-through I'd push for is holiday/boundary-date cases in the regression suite, and checking whether other cumulative reports use the same date logic and share the gap."* [Only claim actual preventive actions if they really happened — otherwise keep this as the forward-looking version.]
+
+**Honesty note:** Scope this accurately — you're production support, not the app developer. The strength is *diagnosis and problem-definition* (finding the holiday pattern that localized the bug), not writing the fix. "I defined the problem the developers then fixed" is true and strong; don't drift into "I fixed the code."
+
+---
+
 ## Cross-cutting rules
 - Every action beat above is confirmed real. Never add a beat you can't defend under a "how did you measure/verify that?" follow-up.
 - No MTTR figure anywhere — none was ever tracked.
