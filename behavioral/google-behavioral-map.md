@@ -82,8 +82,8 @@ None of the six touch reliability trade-offs / "how reliable is reliable enough.
 
 ## Pre-loop to-do (Google-specific)
 
-- [ ] Add an explicit **Learnings** line to Stories **2, 3, 5** (1, 4, 6 already have one). STAR-L closes score better.
-- [ ] Add a one-sentence **user-impact** beat to Stories **2, 5** (Story 6 already leads with it).
-- [ ] Prepare a reserve **"acted on critical feedback from a person"** story (or rehearse Story 3 as the stand-in).
+- [x] Add an explicit **Learnings** line to Stories **2, 3, 5** (1, 4, 6 already have one). ✅ done
+- [x] Add a one-sentence **user-impact** beat to Stories **2, 5** (Story 6 already leads with it). ✅ done — note Story 2 is internal/not customer-facing, framed honestly as "every consumer of the service blocked."
+- [ ] Prepare a reserve **"acted on critical feedback from a person"** story (or rehearse Story 3 as the stand-in). ← needs a real memory; not yet built
 - [ ] Build the **SLO Error Budget Service** to cover the reliability-trade-off gap.
 - [ ] Rehearse each Action out loud with specifics — Google probes Action hardest; "I" for actions, "we" for outcomes.
