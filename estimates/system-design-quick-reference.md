@@ -341,4 +341,4 @@ The pattern end to end — method + numbers applied.
 
 ---
 
-*Companion: `capacity-estimation-anchors.md` holds rate-limiter-specific working numbers. Keep appending here: each durable number goes in its matching section — Part 1 if you compute with it, Part 2 if you recall it — always **value + terse caveat**, never a naked figure.*
+*Keep appending here: each durable number goes in its matching section — Part 1 if you compute with it, Part 2 if you recall it — always **value + terse caveat**, never a naked figure.*
