@@ -58,7 +58,7 @@ All three solved with correct, optimal algorithms. Every problem broke on execut
 
 ## Round 2 — Coding Medium (Aug 30 2026, topological sort / Kahn's)
 
-**Verdict: NO HIRE (as delivered).** Algorithm was L5 — Kahn's chosen cleanly, edge direction `b→a` reasoned correctly out loud, cycle-detection-by-count (`len(result)==n`) identified unprompted. But **4 rounds to runnable**, all four breaks were identifier/name defects, and a NEW one (`i2`) was introduced *while fixing others* after two explicit warnings. Contrast: Round 1 same day was clean-on-delivery, no typos → HIRE. Same brain, opposite verdicts. The gap IS the identifier read-pass, and it did not hold once code got longer (2 structures + build loop).
+**Verdict: LEANING NO HIRE (as delivered).** [Corrected from "No Hire": on Google's 6-point scale the correct rung is Leaning No Hire — algorithm off the No-Hire floor, execution below the hire line.] Algorithm was L5 — Kahn's chosen cleanly, edge direction `b→a` reasoned correctly out loud, cycle-detection-by-count (`len(result)==n`) identified unprompted. But **4 rounds to runnable**, all four breaks were identifier/name defects, and a NEW one (`i2`) was introduced *while fixing others* after two explicit warnings. Contrast: Round 1 same day was clean-on-delivery, no typos → HIRE. Same brain, opposite verdicts. The gap IS the identifier read-pass, and it did not hold once code got longer (2 structures + build loop).
 
 ### 🔴 IDENTIFIER-DEFECT TALLY: 7
 Every one would die in a 20-second read-pass. None got caught before "done."
