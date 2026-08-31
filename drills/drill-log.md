@@ -90,3 +90,26 @@ The defect is not "makes typos." It's: **declares code "done" without verifying 
 - **Metric:** success = zero identifier defects survive to "done" (NOT zero typos while writing). Typo freely; catch all in the pass.
 
 **Monitor tape:** *Last line written ≠ done. Bottom-to-top name scan, then say "done."*
+
+
+---
+
+## Sliding Window Set — 2 timed mediums (Aug 31 2026)
+
+**Result: 2 of 2 CLEAN. Both Hire. Read-pass held BOTH times, unprompted, on real timed code. Tally stayed at 9 — zero new identifier defects.**
+
+- **P1 — longest substring with ≤ k distinct** (dict + counts). Clean on delivery, O(n)/O(min(k,26)), k=0 handled, adversarial-verified (`"aabbcc",k=1`). One verbal correction: the "run of same chars" framing for why the shrink is a `while` was slightly off — real reason: a left-removal only drops distinct-count if that char's freq hits 0, so you loop until back within k. Code was right.
+- **P2 — shortest window with sum ≥ limit** (running sum, no dict). Clean on delivery, O(n)/O(1), impossible-case → 0 handled, record-before-shrink order correct (the shortest-window trap), non-negative monotonicity argument crisp and unprompted.
+
+**Ran the read-pass himself on both, before declaring done — confirmed when asked.** This is the Round-2 lapse NOT recurring.
+
+### Week trend (the thing that matters)
+- Day 1 (Aug 27): 0/3 clean, execution broke all three.
+- Day 2 R1: clean (Hire). Day 2 R2 (Kahn's): lapsed, 4 rounds to runnable (Leaning No Hire) — read-pass failed on longer code.
+- Aug 31: 2/2 clean (Hire, Hire). Read-pass holding as code length grows.
+- **Variable that changed: not the algorithms (L5 throughout) — the read-pass now runs BEFORE "done" and holds. Tally frozen at 9 for a full session.**
+
+### ⚠️ Caveat — do NOT read as "fixed"
+Both clean problems were sliding-window, a pattern drilled cold the same day. The pass held under *favorable* conditions (warm pattern, low algorithmic load). The real test is a COLD pattern under time pressure — where working memory is spent on the algorithm and the pass is most likely to lapse (exactly what happened with Kahn's in R2). Conclusion: "holding under favorable conditions, untested under unfavorable." Next session = cold, un-pre-drilled pattern (graph/DP) to test whether the pass survives divided attention.
+
+### Identifier-defect tally: 9 (unchanged this session)
