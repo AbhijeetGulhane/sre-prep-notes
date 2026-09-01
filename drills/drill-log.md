@@ -113,3 +113,33 @@ The defect is not "makes typos." It's: **declares code "done" without verifying 
 Both clean problems were sliding-window, a pattern drilled cold the same day. The pass held under *favorable* conditions (warm pattern, low algorithmic load). The real test is a COLD pattern under time pressure — where working memory is spent on the algorithm and the pass is most likely to lapse (exactly what happened with Kahn's in R2). Conclusion: "holding under favorable conditions, untested under unfavorable." Next session = cold, un-pre-drilled pattern (graph/DP) to test whether the pass survives divided attention.
 
 ### Identifier-defect tally: 9 (unchanged this session)
+
+---
+
+## Interview-Sim Set — 2 hard-mediums, phone-screen mode (Aug 31 2026)
+
+First session in full interview-simulation mode: interviewer silent, no mid-problem help, candidate drives, grade after. This mode is now the default for all coding.
+
+**Result: P1 Hire (border Strong Hire), P2 Leaning Hire. Approach was Strong-Hire caliber on BOTH — delivery dragged them down.**
+
+- **P1 — alert dedup, unsorted arrival** (dict-of-sorted-lists + bisect). CORRECT, including the hard part: diagnosed that naive sliding window fails on unsorted timestamps, reached for sorted-insert + binary search unprompted. Clean code, no identifier defect. **Held at Hire (not Strong) purely on delivery:** went fully silent while coding, never stated final complexity, never verified out loud. Strong-Hire *work*, Hire *grade*.
+- **P2 — min node capacity, contiguous chunks** (binary-search-on-answer). Approach correct and well-narrated (bounds [max,sum], "binary search on capacity not values"), complexity O(n log S)/O(1) stated and correct. BUT code did not run — two bugs, neither caught:
+  - `curr_um = r` (typo for `curr_sum`) → accumulator never resets → **identifier defect #10**
+  - `if nodes > cap` should be `if nodes > num_nodes` → wrong-variable logic bug → feasibility check broken, wrong answers on the examples
+  Both die if either example is traced by hand. Leaning Hire = right idea, right complexity, delivered artifact has uncaught correctness bugs.
+
+### The finding (now demonstrated, not predicted)
+**The read-pass holds when warm, lapses when the algorithm is cold/hard.** Two clean sliding-window problems earlier same day (warm, pre-drilled) → pass held. Two hard-mediums (cold, not drilled) → P2 lapsed, defect #10. This is the SAME failure mode as Kahn's in R2. The pass is still effortful, not reflex — and effort is the first thing dropped when the algorithm eats working memory. Warm-pattern cleanliness is NOT proof the habit is built.
+
+### Recurring completeness gap
+Said "done" without tracing an example on BOTH problems. Both problems had issues a single out-loud trace would surface (P2's two bugs; P1's correctness left unproven). **Highest-leverage single fix: before "done," trace the ADVERSARIAL example out loud.** It catches `curr_um` (sum visibly not resetting), catches `nodes > cap` (never fires on the trace), and demonstrates correctness instead of leaving the interviewer to verify. One habit fixes both grades.
+
+### Identifier-defect tally: 10
+10. `curr_um` for `curr_sum` — binary-search feasibility check; read-pass lapsed on cold/hard problem (Aug 31)
+
+### Standing gaps to close for Strong Hire (from this session)
+1. Narrate continuously while coding — no silent stretches (P1).
+2. State final complexity, volunteered, at approach time (P1 missed it entirely).
+3. Run read-pass AUDIBLY, especially on cold/hard problems where it lapses (P2, #10).
+4. **Trace the adversarial example out loud before "done" — both problems, both sessions.**
+
