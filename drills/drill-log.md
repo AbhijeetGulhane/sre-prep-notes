@@ -143,3 +143,35 @@ Said "done" without tracing an example on BOTH problems. Both problems had issue
 3. Run read-pass AUDIBLY, especially on cold/hard problems where it lapses (P2, #10).
 4. **Trace the adversarial example out loud before "done" — both problems, both sessions.**
 
+
+
+---
+
+## PROMOTION-GATE RE-TEST — Aug-27 diagnostic re-run (Sep 4 2026)
+
+**Result: 3 of 3 STRICT CLEAN. Tally held flat at 10 across all three — including the graph problem. PROMOTION EARNED.**
+(Note: timeline since collapsed to fast-track — interview Sep 15 AM, ~10 prep days. Promotion is moot as a track-selector but the re-test result stands as the readiness signal.)
+
+Strict-clean bar met on all three: solved in 35min, correct, optimal, runnable as delivered, zero identifier defects.
+
+| | Problem | Verdict | Tally |
+|---|---|---|---|
+| P1 | hashmap — longest consecutive sequence | Strict Clean / Hire | 10 |
+| P2 | sliding-window — longest single-char run w/ k replaces | Strict Clean / Hire (near Strong) | 10 |
+| P3 | **graph — cycle detect / Kahn's** | **Strict Clean / Hire** | **10** |
+
+### Why this matters (vs Aug 27: same 3 categories, was 0/3 clean)
+- **The read-pass HELD on the graph problem** — the exact spot it broke 4× this week (defects 4,5,6,7,9). The `.append()` construct that was defect #6 AND #9 came out with parens this time. Not luck — the habit held under the cold/hard condition where it used to fail.
+- **Out-loud adversarial trace happened UNPROMPTED on P1 and P2** (the #1 open item from the progress report). On P3 he traced the happy path first, needed a nudge to trace the cycle case — then nailed it.
+- **Self-correction working:** caught his own edge-direction confusion on P3 (`b:[a]` vs `a:[b]`) and resolved it before coding; correctly reasoned the `visited` set was redundant in Kahn's and didn't force it in.
+
+### Tally FROZEN at 10 for the whole session
+First full multi-problem session (incl. a graph) with zero new identifier defects. The habit is holding.
+
+### Still shy of Strong Hire (the remaining ceiling, now the fast-track target)
+Two of three landed Hire not Strong, same reason both times:
+- **Complexity not stated out loud** (explained mechanism, didn't put the O() number on it) — P2, P3.
+- **Adversarial case traced SECOND, not first** — P3 (happy path first, cycle case after a nudge). Strong Hire attacks the breaking case first.
+These are the only coding items left worth pushing in the 10 days. Correctness + read-pass are holding — do NOT grind those.
+
+### Identifier-defect tally: 10 (unchanged — held flat through a full 3-problem re-test)
