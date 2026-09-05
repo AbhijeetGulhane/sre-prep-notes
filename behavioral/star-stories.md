@@ -184,3 +184,73 @@
 - Every action beat above is confirmed real. Never add a beat you can't defend under a "how did you measure/verify that?" follow-up.
 - No MTTR figure anywhere — none was ever tracked.
 - When unsure of a number six years on, say "I don't recall the exact figure" and pivot to what you *did* verify. Confident non-answers beat guessed specifics.
+
+
+---
+
+# STAR 7 — Mentorship / Lifting Others
+
+**Rubric pillar:** Googleyness & Leadership — leadership without authority, raising the team bar
+**Round:** Behavioral, Tue Sept 15
+**Spoken length:** ~2 min. Trim path noted at bottom.
+
+---
+
+## Situation
+
+In 2024 a grad joined our Unix engineering team at Barclays on her first rotation. The grad program runs two years, eight months per team, and it wasn't a team she'd chosen — she had no Linux background at all. I'd come through the same program myself, so I picked up the mentoring inside the team structure. The constraint that shaped everything was the clock: eight months, then she rotates out.
+
+## Task
+
+The program's stated goal was just to get her familiar with how the org works at our unit. I thought that was a low bar for eight months, so I proposed to my manager that we take her into real patching work instead, and he agreed. The risk was obvious — patching runs across the estate, and someone six weeks into Linux has no business near it.
+
+## Action
+
+I built it as a ladder. She started on read-only user incidents — pull information out of a system, nothing that changes state. For anything harder I'd assign it, then sit with her and walk through the *pattern* for that class of problem rather than the fix itself, and route similar tickets to her over the following days so she had to apply it cold.
+
+She kept hitting undocumented walls on basic access — how to reach different classes of server, account setup, where the infrastructure sat — so I wrote it up in Confluence as we went, five to ten pages.
+
+Then I moved her onto post-patch service restarts in non-prod. That was the deliberate part: non-prod windows are loose and the blast radius is contained, so it was the one place she could fail on real work at no cost. And I stopped answering.
+
+One example — she was restarting an application as root and it kept failing, because that app needed its own service account. I let her sit on it 20–30 minutes, then instead of telling her the account, I asked her to pull the logs and find which account the last successful start had used. She got it from there, and she never asked me that class of question again.
+
+## Complication — where my approach failed
+
+Once she was solid in non-prod, she moved to prod patching. Prod is a hard four-hour window, and application teams are waiting at the end of it to test against a server in pre-patch state. She hit a service that wouldn't come up and did exactly what I'd trained her to do — she worked it. The window closed with services still down, and I had to go to the application teams and tell them the box was up but not in the state they needed, which pushed their testing.
+
+That was my miss, not hers. In non-prod, persistence is the whole lesson. In prod, the lesson is knowing when to stop and hand off. I taught the first and assumed the second would come with it.
+
+**What I'd do differently:** make the escalation boundary an explicit rule at the moment of moving someone to prod — a hard time budget per server, then escalate — rather than treating it as judgment that transfers with the skill.
+
+## Result
+
+By the end of the rotation she was handling post-patch service issues across 200–300 servers a day, up from ten or twenty when she started, coming to me on major issues or peak cycles. She was clearing routine user incidents unassisted. My manager's reaction was to the delta between where she started and where she finished.
+
+The part that outlasted both of us is the documentation. She rotated out, I moved teams, and the access and infrastructure pages are still there two years on — every new joiner to that team still works off them.
+
+## Reflection
+
+The useful question isn't whether to let someone struggle — it's picking the environment where struggling is cheap and then actually staying out of it. But the corollary is the part I learned the hard way: when you move them out of that environment, the rules change, and you have to say so out loud.
+
+---
+
+## Delivery notes
+
+**Trim path if running long:** cut the root/service-account example. The Complication section is what earns the score — never cut that.
+
+**Do not soften** the line about going to the application teams. Naming a cost you caused and taking it is the strongest beat in the story.
+
+**Precision guardrail:** it is *post-patch service issues* across 200–300 servers, not patching 200–300 servers. Say the narrower thing — the broader claim invites "she'd been on Linux six months, really?"
+
+### Anticipated follow-ups
+
+| Question | Position |
+|---|---|
+| Was she your only mentee? | Answer honestly. Don't inflate. |
+| How did you know she was ready for prod? | Consistent non-prod cycles without escalation. Have a real basis, not a feeling. |
+| Did you tell her it was your mistake? | **Decide before the room.** The strong answer is yes. |
+| Did the docs get maintained after you left? | Unknown — say so. Claim only that they're still referenced. |
+
+### Verifiability
+
+No written record — no performance review entry, no recognition note. Former manager could corroborate but has left Barclays. Story stands on internal consistency; keep every number defensible.
