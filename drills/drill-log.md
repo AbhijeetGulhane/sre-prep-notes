@@ -175,3 +175,37 @@ Two of three landed Hire not Strong, same reason both times:
 These are the only coding items left worth pushing in the 10 days. Correctness + read-pass are holding — do NOT grind those.
 
 ### Identifier-defect tally: 10 (unchanged — held flat through a full 3-problem re-test)
+
+
+---
+
+## Full Mock — Google Round 1 Coding, interviewer-present (Sep 8 2026)
+
+Two problems, realistic interviewer engagement (probing, not coaching). One week out from the Sep 15 interview.
+
+**Overall: Hire-to-Strong Hire. Best session to date. The graph category — which broke every attempt last week — handled cleanly including a hard Part 2 extension.**
+
+### P1 — duplicate request_ids ordered by first-occurrence timestamp
+**Verdict: Hire.**
+- Caught the sorted-vs-unsorted ambiguity; when pushed, correctly designed for unsorted (tracked `min(timestamp)` on repeats). This is the subtlety most miss.
+- **Best moment:** reached for a heap for the ordering, and when asked to justify, correctly reasoned it buys nothing over a sort here and named *when* it would matter (top-k). Trade-off judgment, not pattern-matching.
+- Optimal: O(n) build + O(m log m) sort. Correct, clean final answer.
+- Self-review caught real bugs (`key:lambda`→`key=`, append/bracket) — but over 2-3 passes, and a couple fixed *instead of* tracing when he'd said he'd trace.
+
+### P2 — task scheduling (Kahn's) + Part 2 extension: min time w/ unlimited parallelism
+**Verdict: Strong Hire on Part 2. Best problem I've seen him do.**
+- Part 1 clean: edge direction correct (`adj[a].append(b)`, `indegree[b]+=1`), cycle detection reasoned cleanly (completed≠n → []), traced happy path + reasoned the cycle case without a full trace.
+- Part 2: **saw the level-batching insight immediately** — snapshot `len(q)` per while-iteration = one time unit. Connected "queue contents at one moment = parallel-runnable tasks" unprompted.
+- **The standout:** when pushed on the append-during-`range(len(q))`-iteration trap, gave the precise, complete correctness argument — `len` evaluated once at range creation, queue only grows within a level so no corruption and no index error. That "here's WHY it works" reasoning is the Hire→Strong-Hire differentiator.
+- **Three unprompted senior signals:** flagged multiple-valid-orderings; asked the bounded-parallelism clarifying question (real-systems instinct); asked whether the order output was still needed rather than assuming.
+
+### Identifier-defect tally: 10 (HELD — no new defects this session)
+The paste showed an indentation bug but the screenshot confirmed it was a paste artifact, not his code. No genuine identifier defect. Tally holds at 10 across the full mock.
+
+### Remaining gaps — ALL delivery, none correctness (the Strong-Hire ceiling)
+1. **"It looks correct to me" when asked to self-check** — glanced, didn't read. Turned out fine (paste artifact) but he didn't *know* that when he said it. Strong Hire does the line-by-line read and cites what they verified ("indentation right, snapshot safe, cycle returns -1"), not a vibe.
+2. **DFS/BFS mislabel** — called level-order processing "DFS," self-corrected. Name it right first time.
+3. **Complexity never volunteered out loud** — now the single most consistent gap across every session. Everything else is there. Close every problem with complexity + why, unprompted.
+
+### Headline for interview week
+Correctness and the read-pass are holding (tally frozen at 10 through a full mock incl. graph + hard extension). The ONLY things left are three delivery habits: read code when self-checking, name algorithms precisely, volunteer complexity. These are polish, not gaps in ability. He's in Strong-Hire territory and most of the way into it.
