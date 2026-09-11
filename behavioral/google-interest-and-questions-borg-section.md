@@ -1,7 +1,7 @@
 # Section: "A Google system you admire technically" — Borg
 
 > Drop-in section for `google-interest-and-questions.md`.
-> Round 1 behavioral, Tue Sept 15, 2:00pm.
+> Round 1 behavioral, Tue Sept 15, 1:00pm (coding follows at 2:00pm).
 > Target length when spoken: **55–65 seconds**. This is the behavioral round, not a design round.
 
 ---
