@@ -1,58 +1,64 @@
 # Googleyness Grid — STAR Stories × Behavioral Dimensions
 
-Maps STAR stories against Google's core behavioral dimensions. ✅ = strong hit, ◐ = partial/can be angled, blank = doesn't cover.
+✅ = strong hit, ◐ = partial/can be angled, blank = doesn't cover.
 
-**Status:** rows 1–6 still mapped from *headlines* — confirm each ✅ holds when you re-read the written version. Row 7 is now mapped from the full written story. Row 8 is in progress.
+**Status: content-verified.** All rows mapped from the full written text in `star-stories.md`, not from headlines. The previous version had four of six rows mapped to the wrong stories — its coverage read was invalid.
 
 ## The grid
 
-| Story | Ambiguity | Conflict Resolution | Ownership | Bias to Action | Humility / Learn | Collaboration | Lifting Others | User-First |
+| Story | Ambiguity | Conflict | Ownership | Bias to Action | Humility | Collaboration | Lifting Others | User-First |
 |---|---|---|---|---|---|---|---|---|
-| 1. FD-exhaustion outage | ✅ | | ◐ | ✅ | | | | ◐ |
-| 2. Patching automation (60k) | ◐ | | ✅ | ✅ | | ◐ | | |
-| 3. AD migration (4k) | | ◐ | ✅ | | | ✅ | | |
-| 4. Honest failure | ◐ | | ◐ | | ✅ | | | |
-| 5. Technical disagreement | | ✅ | | | ◐ | ◐ | | |
-| 6. Capsule project | ✅ | | ✅ | ◐ | | | | |
+| 1. Patching automation (60k) | ◐ | | ✅ | ✅ | | | ◐ | ◐ |
+| 2. FD exhaustion | ✅ | | ◐ | ✅ | | ◐ | | ◐ |
+| 3. AD migration / Likewise→VAS | | ✅ | ✅ | ◐ | ◐ | ✅ | | ✅ |
+| 4. Gap config error | | | ◐ | | ✅ | ◐ | | |
+| 5. DCR / DR events | ◐ | | ◐ | ◐ | | ✅ | | |
+| 6. Holiday aggregation bug | ✅ | | ✅ | ✅ | | ✅ | | ◐ |
 | 7. Mentorship / grad rotation | | | ✅ | ◐ | ◐ | ◐ | ✅ | |
-| 8. Network misattribution *(in progress)* | | ◐ | ◐ | | ✅ | ◐ | | |
+| 8. Network misattribution | | ✅ | ◐ | | ✅ | ◐ | | |
 
-## Row 7 — corrections after reading the full story
+## Corrections from the previous version
 
-Downgrades and upgrades against the headline mapping:
+**Row mismatches (previous grid was mapped to the wrong stories):**
+- Row 1 is patching automation, not FD exhaustion. Row 2 is FD exhaustion, not patching.
+- Row 5 is DR events (collaboration), **not** "technical disagreement." It has no conflict thread — that ✅ was fictional.
+- Row 6 is the holiday aggregation bug, **not** the capsule project.
 
-- **Ownership ◐ → ✅.** Not just assigned a mentee. Proposed to the manager that the grad be taken into real patching work beyond the program's stated bar, and owned the outcome.
-- **Collaboration ✅ → ◐.** The headline implied collaboration; the content is mentorship. Working *with* peers is not what this story shows. **This downgrade matters — see verdict.**
-- **Humility blank → ◐.** The Complication section is a genuine self-critical beat: taught persistence, failed to teach the escalation boundary, cost the application teams their test window.
-- **Bias to action blank → ◐.** Wrote the Confluence pages as the gaps surfaced rather than waiting for a documentation initiative.
-- **Lifting Others ✅ confirmed.** Zero Linux to handling post-patch service issues across 200–300 servers/day in eight months. Docs still in use two years on.
+**Capsule has no written STAR.** It exists as a project, not a story. Decide whether to write one or drop it from the map.
+
+**Story 2 is not a humility story.** Its lesson — a misleading alert is a lead, not a verdict — is about *resisting* the obvious wrong answer. That's the opposite of updating away from a wrong belief. Don't angle it there.
 
 ## Coverage read
 
 **Well covered:**
-- **Ownership** — 4 strong (2, 3, 6, 7). Strongest dimension.
-- **Humility / learning** — 2 strong (4, 8) plus partials. Now adequate; was thin.
-- **Ambiguity** — 2 strong (1, 6).
-- **Bias to action** — 2 strong (1, 2).
+- **Collaboration** — 3 strong (3, 5, 6). Previously read as thin; it isn't.
+- **Ownership** — 4 strong (1, 3, 6, 7).
+- **Bias to action** — 3 strong (1, 2, 6).
+- **Ambiguity** — 2 strong (2, 6).
+- **Humility** — 2 strong (4, 8).
 
-**Thin:**
-- **Conflict resolution** — still only ONE strong hit (#5), with partials at #3 and #8. Unchanged gap.
-- **Collaboration** — **now down to one strong hit (#3)** after the row 7 correction. This got worse, not better.
-- **Lifting Others** — one hit (#7). Fine; it's a real one and this dimension rarely gets probed twice.
-- **User-First** — **uncovered.** No story leads with the person on the other end. New column, deliberately left near-empty rather than blank-by-omission.
+**Single-threaded but adequate:**
+- **Lifting Others** — only #7. Rarely probed twice; acceptable.
 
-## Verdict + the fix
+**Conflict — now resolved:**
+#3 and #8 are both genuine disagreement stories, with **opposite outcomes**. In #3 the other team's fear traced to a real prior failure and you adapted the plan around it. In #8 you argued the network team down for thirty minutes and were wrong. Lead with #3, hold #8 for a second probe. That pairing beats two stories where you were right.
 
-**Two gaps, one action each.**
+**User-First — already covered, was never flagged:**
+**#3 is the user-first story.** You notified affected users to reset accounts *before* cutover so nobody was locked out at migration, and built self-service Confluence pages so users could self-diagnose an account-status problem instead of raising a ticket. That's going past the task for the people affected. Pull the thread forward rather than leaving it buried under the conflict framing.
 
-**1. Collaboration and conflict are both single-threaded, and #3 is the only story serving both.** If the interviewer probes either twice, or probes both, story #3 carries too much. Re-angle #3 (AD migration, 4k servers) to surface its conflict thread explicitly — pushback from an app team, a downtime standoff, a priority clash — so it reads as a conflict story, and find collaboration elsewhere. #2 (patching automation) is the likely candidate: a 60k-node rollout needed other teams to adopt it, and adoption is collaboration.
+#6 is user-triggered (traders reported wrong data) but framed as diagnostic method. ◐ only.
 
-**2. User-First is genuinely uncovered.** Production support is the obvious source — a time you went past the ticket for the trader or user on the other end, or pushed a fix because of who was affected rather than what the severity said. One story, doesn't need to be dramatic.
+## Story selection calls
 
-## Watch: self-critical story overlap
+**Use #8, not #4, for the failure question.** #4 is early-career, self-caught, contained, and the underlying mistake is entering wrong values. #8 is recent, public, cost another team thirty minutes, and you defended the wrong position against contrary data. Keep #4 as backup, or repurpose it for "a time you built a process improvement."
 
-Three stories now carry a self-critical beat — #4 (honest failure), #7 (taught the wrong thing), #8 (misattributed to another team). That's fine *only if the flaw types differ*. #7 and #8 are cleanly different: a development misjudgment vs. a technical misdiagnosis. **Check #4** — if its flaw is also "misjudged what someone needed," you have one blind spot told three ways, and an interviewer hearing two of them in a 45-minute round will notice. Re-read #4 and confirm.
+**Flaw-type check — no overlap, safe to tell any two:**
+- #4 — execution error plus a missing verification step
+- #7 — development misjudgment (taught persistence, not the escalation boundary)
+- #8 — reasoning error (misattributed to another team)
+
+**#6 is the strongest story in the set.** Current role, recent, cross-team, systematic method, honest scope note. Lead with it wherever ambiguity, technical depth, or cross-team diagnosis is asked.
 
 ## Do not
 
-Add more new stories. Eight is already more than a 45-minute round can hold. Re-angle what exists.
+Add new stories. Eight is already more than a 45-minute round can hold. The remaining work is re-angling, not writing.
