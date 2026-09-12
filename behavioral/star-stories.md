@@ -254,3 +254,79 @@ The useful question isn't whether to let someone struggle — it's picking the e
 ### Verifiability
 
 No written record — no performance review entry, no recognition note. Former manager could corroborate but has left Barclays. Story stands on internal consistency; keep every number defensible.
+
+
+# STAR 8 — Intellectual Humility / Being Wrong
+
+**Rubric pillar:** Googleyness & Leadership — intellectual humility, updating against evidence
+**Round:** Behavioral, Tue Sept 15, 1:00pm
+**Spoken length:** ~2 min
+
+---
+
+## Situation
+
+2023, during working hours. An active-active application setup went down — no application traffic flowing from any server in the subnet. Bridge call with the app team, the incident manager, and the service owners. I was the Unix side.
+
+## Task
+
+Establish which layer was broken so the right team could work it.
+
+## Action — what I concluded, and why
+
+I ran server-level healthchecks and everything came back green. OS fine, servers reachable, internal communication working. The only thing failing was application traffic, and it was failing across *every* server in the subnet, uniformly.
+
+That pointed hard at network. A server-level fault is contained to one or two hosts — it doesn't present identically across an entire subnet. So I engaged the network team and told them it was on their side.
+
+They pushed back with their own healthcheck results showing the network was clean. **I held my position.** My argument was the uniformity: if this were a server issue it would be contained, not fleet-wide. We went back and forth for about thirty minutes.
+
+## The turn
+
+The standoff wasn't producing anything, so the app team started tracing their own code path and pulled the list of ports the application actually required. I checked those against the server config, and against a set of servers where the same application had been running fine.
+
+One port the application needed had never been in the config on this set. Not a regression — it had never been there. The setup was active-active, so these servers had never carried live traffic before. The gap was dormant until services failed over onto them.
+
+I said on the bridge that the issue was identified and it looked like ports were missing in the server config. Then I asked the network team to confirm nothing was blocking at the port level, added the ports, and tested.
+
+## Cost
+
+No direct business impact, nothing monetary. What it cost was thirty minutes of a bridge — app team, incident manager, service owners — and a network team spending that time proving a negative because of my call.
+
+## Reflection
+
+The inference was reasonable and the conclusion was wrong, and the gap between those two is the useful part.
+
+"Every server is affected" ruled out a server-*specific* fault. It did not rule out a server-*config* fault common to all of them — and in an active-active pair built identically, those two look the same from outside.
+
+Underneath that was the real error: I treated green Unix healthchecks as proof my whole layer was clean. They weren't. Application-level network config sits in my layer and those checks don't touch it. I didn't compare the full config against a known-working server, and that comparison would have found it in minutes.
+
+**What changed:** I stopped letting OS-level checks stand in for my layer being clear, and I added a specific question — when something works somewhere else, what is different about the place it doesn't? That comparison is now where I start rather than where I end up.
+
+**What I'd still do differently:** I corrected the diagnosis publicly, but I never went back to the network team and acknowledged I'd argued against their data for half an hour and they were right. The technical correction landed; the one to them didn't. That's the part I'd change.
+
+---
+
+## Delivery notes
+
+**Do not compress the standoff.** Thirty minutes defending a position against another team's contrary data is the highest-value beat in the story. Most candidates' humility answers have no equivalent.
+
+**Stance:** reasonable inference, wrong conclusion. Own it flatly. Any trace of "I was basically right" inverts the story.
+
+**Don't claim** absence of recurrence as proof ("76 MIMs since and never repeated"). Proves nothing, invites skepticism. Say the habit became how you start.
+
+### Anticipated follow-ups
+
+| Question | Position |
+|---|---|
+| **Why argue thirty minutes instead of checking your own layer?** | Near-certain. Because I believed I *had* checked it — green healthchecks. That was the flaw. Have this ready. |
+| What would have found it faster? | Full config diff against a known-working server. Say it plainly. |
+| How did the network team react? | Honestly — they pushed back with data and were right. Leads into the acknowledgment gap above. |
+| Was this your call or the team's? | Mine. I made the assignment and drove it. |
+
+### Cross-story check
+
+Different flaw type from STAR 7 (development misjudgment). This is technical misdiagnosis. Safe to tell both in the same round. **Verify STAR 4 doesn't duplicate either.**
+
+### Verifiability
+
+2023 MIM, multiple teams on the bridge. Would appear in incident records. No personal writeup naming the misdiagnosis.
