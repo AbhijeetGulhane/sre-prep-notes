@@ -8,7 +8,7 @@
 
 **Competency:** Took initiative beyond assigned scope; eliminated toil.
 
-**Situation:** I was on the team running monthly OS patching across our 60,000-node Linux estate. After each patch wave, engineers had to sweep servers by hand — checking for down services, missing mounts, processes that hadn't come back up, and config drift, then fixing each one manually. Every cycle, roughly 30% of servers came back with minor issues and another ~10% with major ones, so nearly 40% needed a hands-on touch — and everyone treated that sweep as an unavoidable part of patching.
+**Situation:** I was on the team running monthly OS patching across our 60,000-node Linux estate. After each patch wave, engineers had to sweep servers by hand — checking for down services, missing mounts, processes that hadn't come back up, and config drift, then fixing each one manually. Every cycle, 5–10% of servers failed and needed a hands-on fix — and everyone treated that sweep as an unavoidable part of patching.
 
 **Task:** Outside my BAU patching duties, I took it on myself to eliminate that manual post-patch sweep by building automation for it.
 
@@ -18,9 +18,9 @@
 - Extended it to remediate them without a human — restarting stopped services, restoring mounts, bringing processes back up, and correcting drift back to baseline.
 - Drove it across the estate by iterating over the servers live in each patching window via an SSH loop, so every wave of the monthly program got the automated pass instead of a manual one.
 
-**Result:** Absorbed the manual post-patch sweep across the 60,000-node estate. Where ~40% of servers per cycle (30% minor, 10% major) previously required a hands-on fix, the tool caught and remediated those states automatically — engineers only touched a box when something fell outside what it handled.
+**Result:** Absorbed the manual post-patch sweep across the 60,000-node estate. Per-server remediation went from roughly 10 minutes to roughly 1 minute — about 90% — on the 5–10% of servers failing each cycle. Engineers only touched a box when something fell outside what the tool handled.
 
-**Metric discipline:** Scope is the metric — 60,000 nodes, ~40% intervention rate absorbed. Do **not** attach an hours-saved figure unless intervention counts per cycle were actually tracked; "eliminated the manual sweep" beats a soft percentage.
+**Metric discipline (matches resume — do not diverge):** 60,000 nodes, 5–10% failing per cycle, ~10 min → ~1 min per server. If asked for aggregate impact, do the arithmetic out loud rather than quoting a memorized total: 5–10% of 60,000 is roughly 3,000–6,000 servers a cycle, at ~9 minutes saved each. Frame it as derived, not tracked — intervention counts per cycle were never formally measured.
 
 **Probes to have ready:**
 - *"Did the tool auto-remediate the 10% major issues, or escalate them?"* — Answer with the real boundary between auto-fix and escalate. If it auto-fixes minors and escalates majors, say so explicitly; that kills the "were you masking real failures?" probe.
@@ -46,18 +46,18 @@
 
 **Result:** Restored the server to full service in about an hour by isolating the true mechanism — an application file-descriptor leak that had exhausted the process's FD table until it could no longer accept new connections — instead of chasing the memory/disk symptom. This was a production application (internal, not customer-facing), so while it was down every consumer of that service was fully blocked; getting to the real cause fast is what kept the outage to about an hour instead of a longer chase down the wrong path. The value is the diagnostic path and the clean root-cause handoff; no metric beyond restoration.
 
-**Learning (STAR-L):** A misleading alert is a lead, not a verdict — when the symptom (memory/disk) and the vitals disagree, trust the mechanism you can measure over the dashboard that's pointing at you. It's also what convinced me the durable control is FD-utilization alerting, so a slow leak pages someone with headroom instead of surfacing as a full outage.
+**Learning (STAR-L):** A misleading alert is a lead, not a verdict — when the symptom (memory/disk) and the vitals disagree, trust the mechanism you can measure over the dashboard that's pointing at you. It's also what convinced me the durable control is FD-utilization alerting — so I built that threshold alert afterwards, and a slow leak notified someone with headroom instead of surfacing as a full outage.
 
 **Causal chain (say it out loud):** File leak fills the process's FD table → no descriptor free for new sockets → `accept()` fails → all calls refused. Files and sockets draw from the same FD table; the file leak starved the sockets.
 
 **Tool lanes (don't blur these):** `/proc/<pid>/fd` = live descriptor count (the confirmation). Kibana = log/error pattern over time (the buildup), **not** a live FD gauge.
 
 **Probes to have ready:**
-- *"Restart just masked it — did it recur?"* — Restart was the **mitigation**; the durable fix was the app team's code change, driven via the incident summary. Don't claim you prevented recurrence — diagnosed, mitigated, escalated. That's the correct on-call boundary.
+- *"Restart just masked it — did it recur?"* — Restart was the **mitigation**; the durable fix was the app team's code change, driven via the incident summary. The arc is diagnosed → mitigated → escalated the code fix → **closed the detection gap** with the FD threshold alert. Claim detection, not prevention: the leak still happened, it just stopped arriving as an outage.
 - *"Why not just raise the ulimit?"* — Left it deliberately; it was a standard bank-wide parameter, and raising a limit on a genuine leak only delays the same outage without fixing a process that never closes what it opens.
 - *"How did you know it was a leak vs. legitimate high load?"* — Shared-host isolation: other apps on the same box were healthy, so it wasn't a host ceiling; it isolated to the one app, files opened and never released.
 - *"Did you see `too many open files`/EMFILE in the logs, or infer it?"* — Be honest: logs *pointed* at heavy file-opening; `/proc/<pid>/fd` *confirmed* exhaustion. Don't upgrade to a log line you didn't see.
-- **Prevention (memorize — converts the one real gap into competence):** *"The durable SRE control is FD-utilization alerting — `fd_used / fd_limit` over ~80% pages you with headroom, turning a full outage into an early warning."*
+- **Prevention (REAL — this was built, not hypothetical):** *"After the incident I built a Kibana threshold alert on the file-descriptor metric, so the same leak would notify the responsible team while there was still headroom rather than surfacing as a full outage. That held availability until the app team shipped the code-level fix. The restart itself was still a human action — I closed the detection gap, not the remediation one."* Volunteer that last sentence; drawing the line yourself beats having it drawn for you.
 
 ---
 
@@ -330,3 +330,37 @@ Different flaw type from STAR 7 (development misjudgment). This is technical mis
 ### Verifiability
 
 2023 MIM, multiple teams on the bridge. Would appear in incident records. No personal writeup naming the misdiagnosis.
+
+---
+
+# Reconciliation — spoken answers vs. resume
+
+Resume is the source of truth. The interviewer has it open. Where a spoken number differs, the resume wins.
+
+## Numbers that need a one-line distinction
+
+| Claim | Resume | Spoken | Reconciliation |
+|---|---|---|---|
+| On-call rotation size | 15 engineers | 3 | 15 = Unix L3 global follow-the-sun rotation (2 yrs). 3 = current production-support rotation. Always name which. |
+| Patch failure rate | 5–10% per cycle | ~40% needed a touch | **Fixed** — Story 1 now uses 5–10%. Do not reintroduce 30/10/40. |
+| Per-server remediation | 10 min → 1 min (~90%) | previously withheld | **Fixed** — now claimed in Story 1, matching resume. |
+
+## Current-role numbers (have these ready)
+
+- 4 market-finance trading applications, 1,000+ finance users
+- 5–10 incidents daily, mostly minor user issues
+- **76 MIMs handled in 2024**
+- Rotation of 3
+- Roughly 50/50 split: half of issues noticed by traders before monitoring caught them
+
+## Observability — the accurate answer
+
+> The dashboards for these applications were built by a central platform team; I consumed those rather than built them. Where I found gaps I added alerting myself — after the FD-exhaustion outage I built a threshold alert on the file-descriptor metric so the same failure would notify someone with headroom instead of presenting as a full outage. So my experience is gap-filling on someone else's observability rather than designing it end to end. Being the person who works around what the monitoring doesn't catch is a large part of why I want to be the person defining it.
+
+**Do not say** "I didn't build any monitoring" — that understates and contradicts the resume. **Do not say** "I built the observability stack" — that overstates. The line is: consumed the platform, built alerting where I found gaps.
+
+## Resume edit required
+
+The FD bullet currently claims automated remediation. Actual behaviour: alert fired, email to responsible team, **human** triggered the restart. Replace with:
+
+> Diagnosed a full production outage where a service was denying all traffic behind a misleading "memory full" alert; traced the true cause to file-descriptor exhaustion via application logs and the process /proc file-descriptor table, restored service, and closed the detection gap by building a Kibana threshold alert on the file-descriptor metric that paged the responsible team with headroom to restart before exhaustion — holding availability until the application team shipped the code-level fix.
