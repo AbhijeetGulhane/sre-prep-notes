@@ -1,0 +1,51 @@
+### ps -p 1 -o comm=
+systemd
+### id
+uid=1000(jeetg) gid=1000(jeetg) groups=1000(jeetg),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),109(kvm),120(libvirt),1001(docker)
+### ls -l /dev/kvm
+crw-rw---- 1 root kvm 10, 232 Oct  2 11:39 /dev/kvm
+### kvm-ok
+INFO: /dev/kvm exists
+KVM acceleration can be used
+### virsh -c qemu:///system list --all
+ Id   Name   State
+--------------------
+
+### virsh -c qemu:///system net-list --all
+ Name      State    Autostart   Persistent
+--------------------------------------------
+ default   active   yes         yes
+
+### virt-host-validate qemu
+  QEMU: Checking for hardware virtualization                                 : PASS
+  QEMU: Checking if device /dev/kvm exists                                   : PASS
+  QEMU: Checking if device /dev/kvm is accessible                            : PASS
+  QEMU: Checking if device /dev/cpu/0/msr exists                             : WARN (Load the 'msr' module for better x86 CPU features detection)
+  QEMU: Checking if device /dev/vhost-net exists                             : PASS
+  QEMU: Checking if device /dev/net/tun exists                               : PASS
+  QEMU: Checking for cgroup 'cpu' controller support                         : PASS
+  QEMU: Checking for cgroup 'cpuacct' controller support                     : PASS
+  QEMU: Checking for cgroup 'cpuset' controller support                      : PASS
+  QEMU: Checking for cgroup 'memory' controller support                      : PASS
+  QEMU: Checking for cgroup 'devices' controller support                     : WARN (Enable 'devices' in kernel Kconfig file or mount/enable cgroup controller in your system)
+  QEMU: Checking for cgroup 'blkio' controller support                       : PASS
+  QEMU: Checking for device assignment IOMMU support                         : WARN (No ACPI DMAR table found, IOMMU either disabled in BIOS or not supported by this hardware platform)
+  QEMU: Checking for secure guest support                                    : WARN (Unknown if this platform has Secure Guest support)
+### stat -fc %T /sys/fs/cgroup
+cgroup2fs
+### cat /proc/pressure/memory
+some avg10=0.00 avg60=0.00 avg300=0.00 total=0
+full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+### uname -r
+6.18.40.1-microsoft-standard-WSL2
+### lsb_release -ds
+Ubuntu 22.04.5 LTS
+### nproc
+8
+### free -g
+               total        used        free      shared  buff/cache   available
+Mem:              15           0          13           0           1          15
+Swap:              8           0           8
+### systemctl --failed
+  UNIT LOAD ACTIVE SUB DESCRIPTION
+0 loaded units listed.
