@@ -31,7 +31,7 @@ The one habit that is still worst:
 - Keep:
 - Change (one or two things only):
 - Bad on-call week rule: if on-call eats the week, cut fundamentals reading first. Never cut mocks or timed coding.
-- Rest day check: was Friday a real rest day this week? (Y/N) If you swapped it, which day replaced it?
+- Friday check: did you keep Friday to the 75-minute half-capacity block (45 min revisits + 30 min scripting, no new topics)? (Y/N)
 - Real interview scheduled anywhere? If yes, switch to the 2-week company-specific sprint starting ____.
 
 ### 4. One line for the record
